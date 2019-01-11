@@ -1,29 +1,15 @@
 #ifdef USES_P249
 /*
-
-  This plug in is written by Dmitry (rel22 ___ inbox.ru)
   Plugin is based upon SenseAir plugin by Daniel Tedenljung info__AT__tedenljungconsulting.com
+   and Dmitry (rel22 ___ inbox.ru)
   Additional features based on https://geektimes.ru/post/285572/ by Gerben (infernix__AT__gmail.com)
 
-  This plugin reads the CO2 value from MH-Z19 NDIR Sensor
-
-  Pin-out:
-  Hd o
-  SR o   o PWM
-  Tx o   o AOT
-  Rx o   o GND
-  Vo o   o Vin
-  (bottom view)
-  Skipping pin numbers due to inconsistancies in individual data sheet revisions.
   MHZ14:  Connection:
   VCC     5 V
   GND     GND
   Tx   -> RX ESP8266 1st GPIO specified in Device-settings
   Rx   <- TX ESP8266 2nd GPIO specified in Device-settings
 */
-
-// Uncomment the following define to enable the detection range commands:
-//#define ENABLE_DETECTION_RANGE_COMMANDS
 
 #define PLUGIN_249
 #define PLUGIN_ID_249         249

@@ -123,13 +123,14 @@ boolean Plugin_250(byte function, struct EventStruct *event, String& string)
 
 					 // initialize SPI:
 	        SPI.setHwCs(false);
+	        SPI.end();
 	        SPI.begin();
-          SPI.setFrequency(40000000);
 	        addLog(LOG_LEVEL_INFO, F("P250 : SPI Init"));
           Plugin_250_tft = new Adafruit_ST7735(TFT_CS, /*TFT_DC*/Settings.TaskDevicePin1[event->TaskIndex], TFT_RST);
-				  Plugin_250_tft->initR(INITR_BLACKTAB);
+          Plugin_250_tft->initR(INITR_BLACKTAB);
 				  Plugin_250_tft->fillScreen(ST7735_BLACK);
           Plugin_250_tft->setRotation(Settings.TaskDevicePluginConfig[event->TaskIndex][0]);
+          SPI.setFrequency(40000000);
           const GFXfont *f=&FreeMono9pt7b;
           Plugin_250_tft->setFont(f);
 //        yAdvance=(uint8_t)pgm_read_byte(&f->yAdvance);
