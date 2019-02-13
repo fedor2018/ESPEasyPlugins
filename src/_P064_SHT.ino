@@ -8,12 +8,12 @@
 #define PLUGIN_VALUENAME1_064 "Temperature"
 #define PLUGIN_VALUENAME2_064 "Humidity"
 #define PLUGIN_VALUENAME3_064 "Humidity20C"
-#include <Sensirion.h>
+#include <SHTSensor.h>
 
 uint8_t Plugin_064_SHT_Pin_SDA;
 uint8_t Plugin_064_SHT_Pin_SCL;
 
-Sensirion sht1 = Sensirion(12,0,0x40,true);
+SHTSensor sht;//(12,0,0x40,true);
 
 boolean Plugin_064(byte function, struct EventStruct *event, String& string)
 {
@@ -53,27 +53,27 @@ boolean Plugin_064(byte function, struct EventStruct *event, String& string)
 
     case PLUGIN_WEBFORM_LOAD:
       {
-        const String options[] = { F("SHT 1X"), F("SHT 2X"), F("SHT 3X") };
+/*        const String options[] = { F("SHT 1X"), F("SHT 2X"), F("SHT 3X") };
         int indices[] = { 10, 20, 30 };
 
         addFormSelector(string, F("SHT Type"), F("plugin_064_shttype"), 3, options, indices, Settings.TaskDevicePluginConfig[event->TaskIndex][0] );
-
+*/
         success = true;
         break;
       }
 
     case PLUGIN_WEBFORM_SAVE:
       {
-        Settings.TaskDevicePluginConfig[event->TaskIndex][0] = getFormItemInt(F("plugin_064_shttype"));
+//        Settings.TaskDevicePluginConfig[event->TaskIndex][0] = getFormItemInt(F("plugin_064_shttype"));
          success = true;
         break;
       }
 
 case PLUGIN_INIT:
       {
-        Plugin_064_SHT_Pin_SDA = Settings.TaskDevicePin1[event->TaskIndex];
-        Plugin_064_SHT_Pin_SCL = Settings.TaskDevicePin2[event->TaskIndex];
-
+//        Plugin_064_SHT_Pin_SDA = Settings.TaskDevicePin1[event->TaskIndex];
+//        Plugin_064_SHT_Pin_SCL = Settings.TaskDevicePin2[event->TaskIndex];
+/*
      byte Par3 = Settings.TaskDevicePluginConfig[event->TaskIndex][0];
         uint8_t address = 0x00; //SHT1X
         if(Par3 == 20){//SHT2x
@@ -82,14 +82,14 @@ case PLUGIN_INIT:
         else if(Par3 == 30){//SHT 3x
           address = 0x44;
         }
-         String log = F("Sensirion SHT INIT address: ");
-         log += String(address, HEX); 
-         log += F(" SDA:");
+*/         String log = F("Sensirion SHT INIT address: ");
+//         log += String(address, HEX); 
+/*         log += F(" SDA:");
          log += String( Plugin_064_SHT_Pin_SDA);
          log += F(" SCL:");
          log += String(Plugin_064_SHT_Pin_SCL);
-        addLog(LOG_LEVEL_DEBUG,log);
-        sht1 = Sensirion ( Plugin_064_SHT_Pin_SDA , Plugin_064_SHT_Pin_SCL , address , true );
+*/        addLog(LOG_LEVEL_DEBUG,log);
+ //       sht1 = Sensirion ( Plugin_064_SHT_Pin_SDA , Plugin_064_SHT_Pin_SCL , address , true );
      success = true;
       break;
       }
@@ -99,21 +99,25 @@ case PLUGIN_INIT:
         
       float temperature;
       float humidity;
-      float dewpoint;
-      float humidity20C;
+      float dewpoint=0;
+      float humidity20C=0;
        
        int8_t ret = 0;
-
-       ret = sht1.measure(&temperature,&humidity, &dewpoint,20,&humidity20C);
+       if (sht.readSample()) {
+        humidity=sht.getHumidity();
+        temperature=sht.getTemperature();
+        ret = 1;
+       }
+/*       ret = sht1.measure(&temperature,&humidity, &dewpoint,20,&humidity20C);
       
-      while (ret>0 && ret <6)
+//      while (ret>0 && ret <6)
       {
         ret = sht1.measure(&temperature,&humidity, &dewpoint,20,&humidity20C);        
         
       }
+*/      
       
-      
-       if (ret == S_Meas_Rdy) // A new measurement is available
+       if (ret == 1) // A new measurement is available
         {
         UserVar[event->BaseVarIndex] = temperature;
         UserVar[event->BaseVarIndex+1] = humidity;
@@ -129,10 +133,9 @@ case PLUGIN_INIT:
             addLog(LOG_LEVEL_DEBUG, log);
 
             //sendData(event);
-         }else
-          {
+         }else {
             logError(ret);  
-          }
+        }
 
       }
 
@@ -143,9 +146,9 @@ case PLUGIN_INIT:
 
 void logError(int error) 
 {
-  if (error>=0) // No error
+//  if (error>=0) // No error
     return;
-    
+/*    
   String log = "Sensirion SHT Error: ";
   log += String(error);
 
@@ -168,6 +171,7 @@ void logError(int error)
       break;
   }
   addLog(LOG_LEVEL_ERROR, log);
+*/
 }
 
 
