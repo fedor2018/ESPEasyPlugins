@@ -255,7 +255,7 @@ boolean Plugin_250(byte function, struct EventStruct *event, String& string)
     case PLUGIN_WRITE:
       {      
         String arguments = String(string);
-
+/*
         String log = F("ST7735 WRITE: ");
         log += F(", TaskDeviceName: ");
         log += getTaskDeviceName(event->TaskIndex);
@@ -264,7 +264,7 @@ boolean Plugin_250(byte function, struct EventStruct *event, String& string)
         log += F(", cmd str: ");
         log += string;
         addLog(LOG_LEVEL_INFO, log);
-
+*/
         int argIndex = arguments.indexOf(',');
         if (argIndex)
           arguments = arguments.substring(0, argIndex);
